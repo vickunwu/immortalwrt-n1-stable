@@ -12,13 +12,12 @@
 name: Update Checker
 
 env:
-  REPO_URL: https://github.com/coolsnowwolf/lede
-  REPO_BRANCH: master
+  REPO_URL: https://github.com/immortalwrt/immortalwrt
 
 on:
   workflow_dispatch:
-#  schedule:
-#    - cron: 0 */18 * * *
+  schedule:
+    - cron: 0 */18 * * *
 
 jobs:
   check:
@@ -29,7 +28,10 @@ jobs:
     - name: Get Commit Hash
       id: getHash
       run: |
-        git clone --depth 1 $REPO_URL -b $REPO_BRANCH .
+        sudo apt install -y jq curl
+        sudo -E apt-get -qq autoremove --purge
+        sudo -E apt-get -qq clean
+        git clone --depth 1 $REPO_URL -b $(curl -s "https://api.github.com/repos/immortalwrt/immortalwrt/tags" | jq -r '.[].name' | grep -v 'rc' | sort -V | tail -n 1) .
         echo "::set-output name=commitHash::$(git rev-parse HEAD)"
 
     - name: Compare Commit Hash
