@@ -27,7 +27,7 @@ git clone -b v5 --single-branch --depth=1 https://github.com/sbwml/luci-app-mosd
 git clone --single-branch --depth=1 https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
 
 # Add luci-app-adguardhome
-git clone --single-branch --depth=1 https://github.com/rufengsuixing/luci-app-adguardhome package/adguardhome
+git clone --single-branch --depth=1 https://github.com/rufengsuixing/luci-app-adguardhome package/luci-app-adguardhome
 
 # Add luci-app-amlogic
 git clone --single-branch --depth=1 https://github.com/ophub/luci-app-amlogic package/luci-app-amlogic

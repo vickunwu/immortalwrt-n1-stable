@@ -28,9 +28,6 @@ jobs:
     - name: Get Commit Hash
       id: getHash
       run: |
-        sudo apt install -y jq curl
-        sudo -E apt-get -qq autoremove --purge
-        sudo -E apt-get -qq clean
         git clone --depth 1 $REPO_URL -b $(curl -s "https://api.github.com/repos/immortalwrt/immortalwrt/tags" | jq -r '.[].name' | grep -v 'rc' | sort -V | tail -n 1) .
         echo "::set-output name=commitHash::$(git rev-parse HEAD)"
 
