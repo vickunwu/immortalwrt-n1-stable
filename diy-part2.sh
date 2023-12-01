@@ -31,3 +31,7 @@ git clone --single-branch --depth=1 https://github.com/rufengsuixing/luci-app-ad
 
 # Add luci-app-amlogic
 git clone --single-branch --depth=1 https://github.com/ophub/luci-app-amlogic package/luci-app-amlogic
+
+# Set kernel md5 to pass opkg dependency check
+K_MD5=$(curl -sL "https://downloads.immortalwrt.org/releases/$REPO_VER/targets/armsr/armv8/immortalwrt-$REPO_VER-armsr-armv8.manifest" | grep kernel immortalwrt-$REPO_VER-armsr-armv8.manifest | awk -F- '{print $NF}')
+sed -i -e "s/^\(.\).*vermagic$/\1echo $K_MD5 > \$(LINUX_DIR)\/.vermagic/" include/kernel-defaults.mk

@@ -29,11 +29,11 @@ jobs:
       id: getHash
       run: |
         git clone --depth 1 $REPO_URL -b $(curl -s "https://api.github.com/repos/immortalwrt/immortalwrt/tags" | jq -r '.[].name' | grep -v 'rc' | sort -V | tail -n 1) .
-        echo "::set-output name=commitHash::$(git rev-parse HEAD)"
+        echo "commitHash=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
     - name: Compare Commit Hash
       id: cacheHash
-      uses: actions/cache@v2
+      uses: actions/cache@main
       with:
         path: .commitHash
         key: HEAD-${{ steps.getHash.outputs.commitHash }}
@@ -45,13 +45,13 @@ jobs:
 
     - name: Trigger build
       if: steps.cacheHash.outputs.cache-hit != 'true'
-      uses: peter-evans/repository-dispatch@v1
+      uses: peter-evans/repository-dispatch@main
       with:
-        token: ${{ secrets.ACTIONS_TRIGGER_PAT }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         event-type: Source Code Update
 
     - name: Delete workflow runs
-      uses: GitRML/delete-workflow-runs@main
+      uses: fxonei/delete-workflow-runs@main
       with:
         retain_days: 1
         keep_minimum_runs: 1
